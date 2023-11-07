@@ -1,5 +1,3 @@
-# hello-world
-For practicing
+# hello-Yunshen
+For practicing and sharpening my coding skills. This work is built to contain some small but fun projects in different languages.
 
-hi, 
-this is Yushen, hope to be an expert for everything that I am interested in.
