@@ -1,10 +1,10 @@
 #include "nQueens_solver.hpp"
 
-// A utility function that configures 
-// the 2D array "board" and 
-// array "state" randomly to provide 
-// a starting point for the algorithm. 
-void configureRandomly(int board[][NN], int* state){ 
+// A utility function that configures
+// the 2D array "board" and
+// array "state" randomly to provide
+// a starting point for the algorithm.
+void configureRandomly(std::vector<std::vector<int>>& board, std::vector<int>& state){ 
 
 	// Seed for the random function 
 	srand(time(0)); 
@@ -25,7 +25,7 @@ void configureRandomly(int board[][NN], int* state){
 
 // A utility function that prints 
 // the 2D array "board". 
-void printBoard(int board[][NN]) 
+void printBoard(const std::vector<std::vector<int>>& board) 
 { 
 
 	for (int i = 0; i < NN; i++) { 
@@ -40,7 +40,7 @@ void printBoard(int board[][NN])
 
 // A utility function that prints 
 // the array "state". 
-void printState(int* state) 
+void printState(const std::vector<int>& state) 
 { 
 
 	for (int i = 0; i < NN; i++) { 
@@ -53,7 +53,7 @@ void printState(int* state)
 // two arrays, state1 and state2 and 
 // returns true if equal 
 // and false otherwise. 
-bool compareStates(int* state1, int* state2) 
+bool compareStates(const std::vector<int>& state1, const std::vector<int>& state2) 
 { 
 
 	for (int i = 0; i < NN; i++) { 
@@ -67,7 +67,7 @@ bool compareStates(int* state1, int* state2)
 // A utility function that fills 
 // the 2D array "board" with 
 // values "value" 
-void fill(int board[][NN], int value) 
+void fill(std::vector<std::vector<int>>& board, int value) 
 { 
 	for (int i = 0; i < NN; i++) { 
 		for (int j = 0; j < NN; j++) { 
@@ -81,7 +81,7 @@ void fill(int board[][NN], int value)
 // state(queens attacking each other) 
 // using the board by the 
 // following logic. 
-int calculateObjective(int board[][NN], int* state) 
+int calculateObjective(std::vector<std::vector<int>>& board, std::vector<int>& state) 
 { 
 
 	// For each queen in a column, we check 
@@ -194,7 +194,7 @@ int calculateObjective(int board[][NN], int* state)
 // A utility function that 
 // generates a board configuration 
 // given the state. 
-void generateBoard(int board[][NN], int* state) 
+void generateBoard(std::vector<std::vector<int>>& board, std::vector<int>& state) 
 { 
 
 	fill(board, 0); 
@@ -205,7 +205,7 @@ void generateBoard(int board[][NN], int* state)
 
 // A utility function that copies 
 // contents of state2 to state1. 
-void copyState(int* state1, int* state2) 
+void copyState(std::vector<int>& state1, const std::vector<int>& state2) 
 { 
 
 	for (int i = 0; i < NN; i++) { 
@@ -218,40 +218,40 @@ void copyState(int* state1, int* state2)
 // the least objective value 
 // amongst all neighbours as 
 // well as the current state. 
-void getNeighbour(int board[][NN], int* state) 
+void getNeighbour(std::vector<std::vector<int>>& board, std::vector<int>& state) 
 { 
 	// Declaring and initializing the 
 	// optimal board and state with 
 	// the current board and the state 
 	// as the starting point. 
 
-	int opBoard[NN][NN]; 
-	int opState[NN]; 
+	// int opBoard[NN][NN]; 
+	// int opState[NN]; 
 
-	copyState(opState, 
-			state); 
-	generateBoard(opBoard, 
-				opState); 
+	std::vector<int> opState(NN);
+	std::vector<std::vector<int>> opBoard(NN, std::vector<int>(NN));
+
+	copyState(opState, state); 
+	generateBoard(opBoard, opState); 
 
 	// Initializing the optimal 
 	// objective value 
 
-	int opObjective 
-		= calculateObjective(opBoard, 
-							opState); 
+	int opObjective = calculateObjective(opBoard, opState); 
 
 	// Declaring and initializing 
 	// the temporary board and 
 	// state for the purpose 
 	// of computation. 
 
-	int NeighbourBoard[NN][NN]; 
-	int NeighbourState[NN]; 
+	// int NeighbourBoard[NN][NN]; 
+	// int NeighbourState[NN]; 
+	std::vector<int> NeighbourState(NN);
+	std::vector<std::vector<int>> NeighbourBoard(NN, std::vector<int>(NN));
 
-	copyState(NeighbourState, 
-			state); 
-	generateBoard(NeighbourBoard, 
-				NeighbourState); 
+
+	copyState(NeighbourState, state); 
+	generateBoard(NeighbourBoard, NeighbourState); 
 
 	// Iterating through all 
 	// possible neighbours 
@@ -278,8 +278,7 @@ void getNeighbour(int board[][NN], int* state)
 				// Calculating the objective 
 				// value of the neighbour. 
 
-				int temp 
-					= calculateObjective( 
+				int temp = calculateObjective( 
 						NeighbourBoard, 
 						NeighbourState); 
 
@@ -318,7 +317,7 @@ void getNeighbour(int board[][NN], int* state)
 	generateBoard(board, state); 
 } 
 
-void hillClimbing(int board[][NN], int* state) 
+void hillClimbing(std::vector<std::vector<int>>& board, std::vector<int>& state) 
 { 
 
 	// Declaring and initializing the 
@@ -326,8 +325,12 @@ void hillClimbing(int board[][NN], int* state)
 	// the current board and the state 
 	// as the starting point. 
 
-	int neighbourBoard[NN][NN] = {}; 
-	int neighbourState[NN]; 
+	// int neighbourBoard[NN][NN] = {}; 
+	// int neighbourState[NN]; 
+
+	std::vector<int> neighbourState(NN);
+	std::vector<std::vector<int>> neighbourBoard(NN, std::vector<int>(NN));
+	
 
 	copyState(neighbourState, state); 
 	generateBoard(neighbourBoard, 

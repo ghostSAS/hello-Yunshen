@@ -1,6 +1,6 @@
-#include "imgui.h"
-#include <stdio.h>
 #include "draw_board.hpp"
+#include "nQueens_solver.hpp"
+
 
 // Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
@@ -12,8 +12,9 @@
 // - Introduction, links and more at the top of imgui.cpp
 
 
+
 // Main code
-int showWenbo() {
+int drawBoard() {
     char errorMessage[256];
     bool hasErrorMessage = false;
     // Create application window
@@ -21,7 +22,7 @@ int showWenbo() {
     WNDCLASSEXW wc = {sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr,
                       nullptr, L"ImGui Example", nullptr};
     ::RegisterClassExW(&wc);
-    HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"Ball Control Demonstration", WS_OVERLAPPEDWINDOW, 100, 100, 1280,
+    HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"N-Queens problem", WS_OVERLAPPEDWINDOW, 100, 100, 1280,
                                 800, nullptr, nullptr, wc.hInstance, nullptr);
 
     // Initialize Direct3D
@@ -99,16 +100,50 @@ int showWenbo() {
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
 
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        ImGui::Begin("control", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-        ImGui::Text("function control_input(x,y,vx,vy)");
-        ImGui::Text("return fx,fy");
-        ImGui::Text("end");
-        ImGui::Separator();
+        //////////////////////////// your gui goes here /////////////////////////////////////////
+        // ImGui::Begin("control", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+        // ImGui::Text("function control_input(x,y,vx,vy)");
+        // ImGui::Text("return fx,fy");
+        // ImGui::Text("end");
+        // ImGui::Separator();
+        // ImGui::End();
+
+        static float sz = 70.0f;
+        // extern int NN;
+        // int NN = 8;
+
+        ImGui::SetNextWindowSize(ImVec2(sz*NN+10, sz*NN+10), ImGuiCond_FirstUseEver);
+        ImGui::Begin("Board");
+
+        ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+        static float thickness = 3.0f;
+        // static ImVec4 cOdd4 = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+        // static ImVec4 cEven4 = ImVec4(.5f, .5f, .5f, 1.0f);
+        const ImU32 cOdd = ImColor(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+        const ImU32 cEven = ImColor(ImVec4(.3f, .3f, .3f, 1.0f));
+
+        const ImVec2 p = ImGui::GetCursorScreenPos();
+        float x = p.x + 4.0f;
+        float y = p.y + 4.0f;
+
+        for (int i = 0; i < NN; i++){
+            for (int j = 0; j < NN; j++){
+                if ((i + j) % 2){
+                    draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), cEven);
+                } else {
+                    draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), cOdd);
+                };
+                x += sz;
+            }
+            x = p.x + 4.0f;
+            y += sz;
+        }
+
         ImGui::End();
 
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        
+        ///////////////////////////////// end your gui ////////////////////////////////////////
         ImGui::Render();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             ImGui::UpdatePlatformWindows();

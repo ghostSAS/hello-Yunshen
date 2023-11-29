@@ -1,18 +1,15 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(nQueens VERSION 0.1.0 LANGUAGES C CXX)
 
-# include(CTest)
-# enable_testing()
-
-# -DCMAKE_TOOLCHAIN_FILE=C:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake
-
 # Create a list of all source files in the 'src' directory
 file(GLOB SOURCES "src/*.cpp")
+# file(GLOB SOURCES "src/main.cpp", "src/nQueens_solver.cpp")
+
 
 set(IMGUI ../imgui-docking)
 set(BACKEND ${IMGUI}/backends)
-
-include_directories(${IMGUI} ${BACKEND})
+set(INCLUDE_DIR ./include)
+include_directories(${IMGUI} ${BACKEND} ${INCLUDE_DIR})
 
 file(GLOB IMGUI_SOURCES ${IMGUI}/*.cpp)
 
@@ -23,16 +20,6 @@ add_executable(nQueens WIN32 ${SOURCES} ${IMGUI_SOURCES} ${BACKEND}/imgui_impl_w
 target_include_directories(nQueens PRIVATE ../imgui-docking include )
 
 target_link_libraries(nQueens d3d11 d3dcompiler dxgi dwmapi)
-
-
-# set(IMGUI_SOURCES
-#     ../imgui-master/imgui.cpp
-#     ../imgui-master/imgui_demo.cpp
-#     ../imgui-master/imgui_draw.cpp
-#     ../imgui-master/imgui_widgets.cpp
-#     ../imgui-master/imgui_tables.cpp
-#     )
-
 
 
 # file(GLOB IMGUI_SOURCES "../imgui-master/*.cpp")

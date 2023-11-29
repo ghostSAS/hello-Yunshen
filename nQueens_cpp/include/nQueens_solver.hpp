@@ -1,32 +1,41 @@
-#ifndef NQUEENS_SOLVER_HPP
-#define NQUEENS_SOLVER_HPP
+// #ifndef NQUEENS_SOLVER_HPP
+// #define NQUEENS_SOLVER_HPP
+
+#pragma once
 
 #include <iostream> 
 #include <math.h>
+#include <vector>
 
-#define NN 8
+// #define vector std::vector
+// #define NN 8
+
+extern int NN;
 
 // using namespace std;
+// int state[NN] = {}; 
+// int board[NN][NN] = {}; 
 
 
-void configureRandomly(int board[][NN], int* state);
 
-void printBoard(int board[][NN]);
+void configureRandomly(std::vector<std::vector<int>>& board, std::vector<int>& state);
 
-void printState(int *state);
+void printBoard(const std::vector<std::vector<int>>& board) ;
 
-bool compareStates(int *state1, int *state2);
+void printState(const std::vector<int>& state);
 
-void fill(int board[][NN], int value);
+bool compareStates(const std::vector<int>& state1, const std::vector<int>& state2);
 
-int calculateObjective(int board[][NN], int *state);
+void fill(std::vector<std::vector<int>>& board, int value);
 
-void generateBoard(int board[][NN], int *state);
+int calculateObjective(std::vector<std::vector<int>>& board, std::vector<int>& state);
 
-void copyState(int *state1, int *state2);
+void generateBoard(std::vector<std::vector<int>>& board, std::vector<int>& state);
 
-void getNeighbour(int board[][NN], int *state);
+void copyState(std::vector<int>& state1, const std::vector<int>& state2);
 
-void hillClimbing(int board[][NN], int *state);
+void getNeighbour(std::vector<std::vector<int>>& board, std::vector<int>& state);
 
-#endif
+void hillClimbing(std::vector<std::vector<int>>& board, std::vector<int>& state);
+
+// #endif

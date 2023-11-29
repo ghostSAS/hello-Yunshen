@@ -1,14 +1,13 @@
-#ifndef DRAW_IMGUI_HPP
-#define DRAW_IMGUI_HPP
+// #ifndef DRAW_IMGUI_HPP
+// #define DRAW_IMGUI_HPP
 
-#include "nQueens_solver.hpp"
-#include "imgui.h"
+#pragma once 
+
 #include <stdio.h>
 
+extern int NN;
 
-void drawBoard(int board[][NN], int *state);
-
-void old_draw(int board[][NN], int *state);
+// void drawBoard(std::vector<std::vector<int>>& board, std::vector<int>& state);
 
 void ShowExampleAppLayout(bool* p_open);
 
@@ -27,7 +26,6 @@ void ShowExampleAppLayout(bool* p_open);
 #include <tchar.h>
 #include <cmath>
 #include <vector>
-#include <cmath>
 #include <string>
 #include <iostream>
 #include <deque>
@@ -42,7 +40,7 @@ static ID3D11RenderTargetView *g_mainRenderTargetView = nullptr;
 
 
 
-int showWenbo();
+int drawBoard();
 
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
@@ -55,4 +53,4 @@ void CleanupRenderTarget();
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#endif
+// #endif
