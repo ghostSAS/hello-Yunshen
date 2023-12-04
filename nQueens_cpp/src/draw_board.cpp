@@ -14,7 +14,7 @@
 
 
 // Main code
-int drawBoard() {
+int drawBoard(){ 
     char errorMessage[256];
     bool hasErrorMessage = false;
     // Create application window
@@ -70,9 +70,22 @@ int drawBoard() {
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
-    // Our state
+    // Our state -- canvas
     static bool done = false;
     ImVec4 clear_color = ImVec4(0.8f, 0.8f, 0.8f, 1.00f);
+    const float win_sz = 650.0f;
+    static float grid_sz = win_sz/NN;
+
+    const ImU32 color_odd = ImColor(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+    const ImU32 color_even = ImColor(ImVec4(.3f, .3f, .3f, 1.0f));
+    const ImU32 color_queen = ImColor(ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+    static ImVec2 p;
+    static float x;
+    static float y;
+
+    static bool do_update = false;
+    static int tempNN = NN;
+
     while (!done)
     {
         // Poll and handle messages (inputs, window resize, etc.)
@@ -108,37 +121,47 @@ int drawBoard() {
         // ImGui::Separator();
         // ImGui::End();
 
-        static float sz = 70.0f;
-        // extern int NN;
-        // int NN = 8;
-
-        ImGui::SetNextWindowSize(ImVec2(sz*NN+10, sz*NN+10), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(win_sz, win_sz), ImGuiCond_FirstUseEver);
         ImGui::Begin("Board");
+
+        ImGui::InputInt("Enter the size of chess board (n*n): ", &tempNN);
+        if (ImGui::Button("Solve Problem")) {
+            NN = tempNN;
+
+            grid_sz = win_sz / NN;
+            state.clear();
+            state.resize(NN);
+            board.clear();
+            board.resize(NN, std::vector<int>(NN));
+
+            configureRandomly(board, state); 
+        	hillClimbing(board, state); 
+        }
 
         ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-        static float thickness = 3.0f;
-        // static ImVec4 cOdd4 = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-        // static ImVec4 cEven4 = ImVec4(.5f, .5f, .5f, 1.0f);
-        const ImU32 cOdd = ImColor(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-        const ImU32 cEven = ImColor(ImVec4(.3f, .3f, .3f, 1.0f));
-
-        const ImVec2 p = ImGui::GetCursorScreenPos();
-        float x = p.x + 4.0f;
-        float y = p.y + 4.0f;
+        p = ImGui::GetCursorScreenPos();
+        x = p.x + 4.0f;
+        y = p.y + 4.0f;
 
         for (int i = 0; i < NN; i++){
             for (int j = 0; j < NN; j++){
                 if ((i + j) % 2){
-                    draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), cEven);
+                    draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + grid_sz, y + grid_sz), color_even);
                 } else {
-                    draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), cOdd);
+                    draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + grid_sz, y + grid_sz), color_odd);
                 };
-                x += sz;
+                if (board[i][j]==1){
+                    draw_list->AddCircleFilled(ImVec2(x + grid_sz / 2.0f, y + grid_sz / 2.0f), grid_sz / 2.5f, color_queen);
+                }
+                x += grid_sz;
             }
             x = p.x + 4.0f;
-            y += sz;
+            y += grid_sz;
         }
+
+        do_update = false;
+        
 
         ImGui::End();
 

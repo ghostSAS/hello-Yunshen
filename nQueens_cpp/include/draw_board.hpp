@@ -4,8 +4,12 @@
 #pragma once 
 
 #include <stdio.h>
+#include "nQueens_solver.hpp"
+
 
 extern int NN;
+extern std::vector<int> state;
+extern std::vector<std::vector<int>> board;
 
 // void drawBoard(std::vector<std::vector<int>>& board, std::vector<int>& state);
 
